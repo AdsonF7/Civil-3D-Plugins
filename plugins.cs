@@ -21,5 +21,17 @@ using DBObject = Autodesk.AutoCAD.DatabaseServices.DBObject;
 
 namespace Plugins {
   public class Plugins {
+    private void ChangeAttributeBlock(BlockReference br, string tag, string value) {
+      Document doc = Application.DocumentManager.MdiActiveDocument;
+      using (Transaction tr = blkRef.Database.TransactionManager.StartTransaction()) {
+        foreach (ObjectId attId in blkRef.AttributeCollection) {
+          AttributeReference attRef = (AttributeReference)tr.GetObject(attId, OpenMode.ForWrite);
+          if (attRef.Tag == tag) {
+            attRef.TextString = value
+          }
+        }
+        tr.Commit();
+      }
+    }
   }
 }
