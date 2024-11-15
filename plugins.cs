@@ -23,12 +23,16 @@ namespace Plugins {
   public class Plugins {
     
     //Mudar atributo de uma referencia de bloco
-    private void ChangeAttributeBlock(BlockReference blkRef, string tag, string value) {
+    private void ChangeAttributeBlock(BlockReference blkRef, string tag, string value)
+    {
       Document doc = Application.DocumentManager.MdiActiveDocument;
-      using (Transaction tr = blkRef.Database.TransactionManager.StartTransaction()) {
-        foreach (ObjectId attId in blkRef.AttributeCollection) {
+      using (Transaction tr = blkRef.Database.TransactionManager.StartTransaction())
+      {
+        foreach (ObjectId attId in blkRef.AttributeCollection)
+        {
           AttributeReference attRef = (AttributeReference)tr.GetObject(attId, OpenMode.ForWrite);
-          if (attRef.Tag == tag) {
+          if (attRef.Tag == tag)
+          {
             attRef.TextString = value
           }
         }
@@ -37,12 +41,16 @@ namespace Plugins {
     }
 
     //Recuperar Atributo de Bloco Dinamico
-    public GetDynamicBlockParameterValues(BlockReference blkRef, string property) {
+    public GetDynamicBlockParameterValues(BlockReference blkRef, string property)
+    {
       string value = null;
-      if (blkRef.IsDynamicBlock) {
+      if (blkRef.IsDynamicBlock)
+      {
         DynamicBlockReferencePropertyCollection propCollection = blkRef.DynamicBlockReferencePropertyCollection;
-        foreach (DynamicBlockReferenceProperty prop in propCollection) {
-          if (prop.PropertyName == property) {
+        foreach (DynamicBlockReferenceProperty prop in propCollection)
+        {
+          if (prop.PropertyName == property)
+          {
             value = prop.Value.ToString();
           }
         }
@@ -54,12 +62,16 @@ namespace Plugins {
     }
 
     //Recuperar Atributo de Texto
-    private string GetCustomAttributeValue(BlockReference blkRef, string attributeName) {
+    private string GetCustomAttributeValue(BlockReference blkRef, string attributeName)
+    {
       string attributeValue = null;
-      using (Transaction tr = blkRef.Database.TransactionManager.StartTransaction()) {
-        foreach (ObjectId attId in blkRef.AttributeCollection) {
+      using (Transaction tr = blkRef.Database.TransactionManager.StartTransaction())
+      {
+        foreach (ObjectId attId in blkRef.AttributeCollection)
+        {
           AttributeReference attRef = (AttributeReference)tr.GetObject(attId, OpenMode.ForRead);
-          if (attRef.Tag.Equals(attributeName, StringComparison.InvariantCultureIgnoreCase)) {
+          if (attRef.Tag.Equals(attributeName, StringComparison.InvariantCultureIgnoreCase))
+          {
             attributeValue = attRef.TextString;
             break;
           }
@@ -70,20 +82,27 @@ namespace Plugins {
     }
 
     //Recuperar Atributo de Dicionario
-    private string GetCustomDataFromExtensionDictionary(BlockReference blkRef, string key) {
+    private string GetCustomDataFromExtensionDictionary(BlockReference blkRef, string key)
+    {
       string customData = null;
       Document doc = Application.DocumentManager.MdiActiveDocument;
-      if (blkRef.ExtensionDictionary.IsNull) {
+      if (blkRef.ExtensionDictionary.IsNull)
+      {
         return "Nenhum dicionário de extensão encontrado.";
       }
-      using (Transaction tr = blkRef.Database.TransactionManager.StartTransaction()) { 
+      using (Transaction tr = blkRef.Database.TransactionManager.StartTransaction())
+      { 
         DBDictionary extDict = (DBDictionary)tr.GetObject(blkRef.ExtensionDictionary, OpenMode.ForRead);
-        if (extDict.Contains(key)) {
+        if (extDict.Contains(key))
+        {
           DBObject obj = tr.GetObject(extDict.GetAt(key), OpenMode.ForRead);
-          if (obj is Xrecord xrec) {
+          if (obj is Xrecord xrec)
+          {
             ResultBuffer rb = xrec.Data;
-            foreach (TypedValue tv in rb) {
-              if (tv.TypeCode == (int)DxfCode.Text) {
+            foreach (TypedValue tv in rb)
+            {
+              if (tv.TypeCode == (int)DxfCode.Text)
+              {
                 customData = tv.Value.ToString();
                 break;
               }
