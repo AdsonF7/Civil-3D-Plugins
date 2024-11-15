@@ -36,7 +36,7 @@ namespace Plugins {
       }
     }
 
-    //
+    //Recuperar Atributo de Bloco Dinamico
     public GetDynamicBlockParameterValues(BlockReference blkRef, string property) {
       string value = null;
       if (blkRef.IsDynamicBlock) {
@@ -53,6 +53,7 @@ namespace Plugins {
       return value;
     }
 
+    //Recuperar Atributo de Texto
     private string GetCustomAttributeValue(BlockReference blkRef, string attributeName) {
       string attributeValue = null;
       using (Transaction tr = blkRef.Database.TransactionManager.StartTransaction()) {
@@ -68,6 +69,7 @@ namespace Plugins {
       return attributeValue ?? "Atributo não encontrado";
     }
 
+    //Recuperar Atributo de Dicionario
     private string GetCustomDataFromExtensionDictionary(BlockReference blkRef, string key) {
       string customData = null;
       Document doc = Application.DocumentManager.MdiActiveDocument;
